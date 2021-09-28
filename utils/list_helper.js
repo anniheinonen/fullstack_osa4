@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const User = require('../models/user')
 
 const dummy = (blogs) => {
     return 1
@@ -30,7 +31,6 @@ const mostBlogs = (blogs) => {
 const mostLikes = (blogs) => {
     if (blogs.length === 0) return {}
 
-    //const counted = _.groupBy(blogs, "author");
     let counted = blogs.reduce((acc, curr) => {
         let blog = acc.find(blog => blog.author === curr.author);
 
@@ -47,9 +47,14 @@ const mostLikes = (blogs) => {
     });
 
     return {
-        "author": sorted[sorted.length -1].author,
-        "likes": sorted[sorted.length -1].likes
+        "author": sorted[sorted.length - 1].author,
+        "likes": sorted[sorted.length - 1].likes
     }
+}
+
+const usersInDb = async () => {
+    const users = await User.find({})
+    return users.map(u => u.toJSON())
 }
 
 module.exports = {
@@ -57,5 +62,6 @@ module.exports = {
     totalLikes,
     favoriteBlog,
     mostBlogs,
-    mostLikes
+    mostLikes,
+    usersInDb
 }
